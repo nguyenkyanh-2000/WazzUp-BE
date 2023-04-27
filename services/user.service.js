@@ -26,10 +26,14 @@ userService.getUserById = async (userId) => {
 };
 
 userService.getUserByFilter = async (filter, options) => {
-  const user = await User.findOne(filter, options);
-  if (!user)
-    throw new AppError(400, "User not found", "Get user by filter error");
-  return user;
+  try {
+    const user = await User.findOne(filter, options);
+    if (!user)
+      throw new AppError(400, "User not found", "Get user by filter error");
+    return user;
+  } catch (error) {
+    throw new AppError(400, error.message, "Get user by filter error");
+  }
 };
 
 userService.updateUserById = async function (userId, updatedInfo) {

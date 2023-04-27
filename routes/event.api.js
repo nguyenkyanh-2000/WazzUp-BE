@@ -165,6 +165,40 @@ router.get(
 );
 
 /**
+ * @route GET /events/:id/organizer
+ * @description Get the organizer of an event
+ * @access public
+ */
+
+router.get(
+  "/:id/organizer",
+  validators.validate([
+    param("id", "Invalid Id")
+      .exists()
+      .isString()
+      .custom(validators.checkObjectId),
+  ]),
+  eventController.getOrganizerFromEvent
+);
+
+/**
+ * @route GET /events/:id/attendees
+ * @description Get a list of attendees for an event
+ * @access public
+ */
+
+router.get(
+  "/:id/attendees",
+  validators.validate([
+    param("id", "Invalid Id")
+      .exists()
+      .isString()
+      .custom(validators.checkObjectId),
+  ]),
+  eventController.getAttendeesFromEvent
+);
+
+/**
  * @route POST /events/attend/:id
  * @description Attend an event
  * @access login required

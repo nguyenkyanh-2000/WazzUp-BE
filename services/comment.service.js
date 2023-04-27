@@ -39,7 +39,7 @@ commentService.updateComment = async (userId, commentId, commentInfo) => {
     comment.content = content;
     comment.save();
 
-    return comment;
+    return { comment };
   } catch (error) {
     throw new AppError(400, error.message, "Update comment error");
   }
@@ -47,7 +47,9 @@ commentService.updateComment = async (userId, commentId, commentInfo) => {
 
 commentService.getCommentsFromEvent = async (eventId) => {
   try {
-    const comments = await Comment.find({ event: eventId });
+    const comments = await Comment.find({ event: eventId }).populate(
+      "commenter"
+    );
     return comments;
   } catch (error) {
     throw new AppError(400, error.message, "Get comments from an event error");
@@ -62,7 +64,8 @@ commentService.deleteCommentById = async (userId, commentId) => {
     if (comment.commenter.toString() !== userId)
       throw new Error("Insufficient right to update comment");
 
-    // TODO
+    const result = await Comment.findByIdAndDelete(commentId);
+    return result;
   } catch (error) {
     throw new AppError(
       400,

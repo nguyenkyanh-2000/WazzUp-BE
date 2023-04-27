@@ -15,7 +15,7 @@ eventService.getEventById = async (eventId) => {
     const event = await Event.findOne({ _id: eventId });
     if (!event)
       throw new AppError(400, "Event not found", "Get event by ID error");
-    return event;
+    return { event };
   } catch (error) {
     throw new AppError(400, error.message, "Get event by ID error");
   }
@@ -264,6 +264,37 @@ eventService.removeUserFromEvent = async function (userId, eventId) {
     await event.save();
 
     return true;
+  } catch (error) {
+    throw new AppError(400, error.message, "Remove user from event error");
+  }
+};
+
+eventService.getAttendeesFromEvent = async function (eventId) {
+  try {
+    const event = await Event.findById(eventId)
+      .select({ attendees: 1 })
+      .populate("attendees");
+
+    const total = await Event.findById(eventId)
+      .select({ attendees: 1 })
+      .count();
+    if (!event) throw new Error("Event does not exist");
+
+    return { event, total };
+  } catch (error) {
+    throw new AppError(400, error.message, "Remove user from event error");
+  }
+};
+
+eventService.getOrganizerFromEvent = async function (eventId) {
+  try {
+    const event = await Event.findById(eventId)
+      .select({ organizer: 1 })
+      .populate("organizer");
+
+    if (!event) throw new Error("Event does not exist");
+
+    return { event };
   } catch (error) {
     throw new AppError(400, error.message, "Remove user from event error");
   }

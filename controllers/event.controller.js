@@ -111,4 +111,41 @@ eventController.deleteEvent = async (req, res, next) => {
     next(error);
   }
 };
+
+eventController.getAttendeesFromEvent = async (req, res, next) => {
+  try {
+    const eventId = req.params.id;
+    const event = await eventService.getAttendeesFromEvent(eventId);
+
+    sendResponse(
+      res,
+      200,
+      true,
+      event,
+      null,
+      "Get attendees from event successful"
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+eventController.getOrganizerFromEvent = async (req, res, next) => {
+  try {
+    const eventId = req.params.id;
+    const event = await eventService.getOrganizerFromEvent(eventId);
+
+    sendResponse(
+      res,
+      200,
+      true,
+      event,
+      null,
+      "Get organizer from event successful"
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = eventController;

@@ -5,12 +5,16 @@ const bcrypt = require("bcryptjs");
 const authService = {};
 
 authService.loginWithEmail = async (email, password) => {
-  const user = await userService.getUserByFilter({ email }, "+password");
-  if (!user || !(await user.isPasswordMatched(password)))
-    throw new AppError(400, "Invalid credentials", "Login with email error");
-  const accessToken = await user.generateToken();
+  try {
+    const user = await userService.getUserByFilter({ email }, "+password");
+    if (!user || !(await user.isPasswordMatched(password)))
+      throw new AppError(400, "Invalid credentials", "Login with email error");
+    const accessToken = await user.generateToken();
 
-  return { user, accessToken };
+    return { user, accessToken };
+  } catch (error) {
+    throw new AppError(400, error.message, "Login with email error");
+  }
 };
 
 authService.registerWithEmail = async (accountInfo) => {

@@ -8,7 +8,7 @@ const validators = require("../middlewares/validators");
  * @route POST /register
  * @description Register a user
  * @access public
- * @allowedBody: {name, email, password}
+ * @requiredBody: {name, email, password}
  */
 
 router.post(

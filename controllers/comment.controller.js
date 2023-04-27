@@ -50,7 +50,7 @@ commentController.getCommentsFromEvent = async (req, res, next) => {
       res,
       200,
       true,
-      comments,
+      { comments },
       null,
       "Get comments from event successful"
     );
