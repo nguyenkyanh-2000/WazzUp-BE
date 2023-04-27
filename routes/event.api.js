@@ -98,6 +98,17 @@ router.delete(
  * @description Get an event by id.
  * @access Public
  */
+router.get(
+  "/me",
+  authentication.loginRequired,
+  eventController.getEventsFromCurrentUser
+);
+
+/**
+ * @route GET /events/:id
+ * @description Get an event by id.
+ * @access Public
+ */
 
 router.get(
   "/:id",

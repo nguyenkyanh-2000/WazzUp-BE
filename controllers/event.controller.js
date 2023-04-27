@@ -32,7 +32,26 @@ eventController.getEventsByFilter = async (req, res, next) => {
       true,
       events,
       null,
-      "Get event by filters successful"
+      "Get events by filters successful"
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+eventController.getEventsFromCurrentUser = async (req, res, next) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const userId = req.userId;
+    const options = { page, limit };
+    const events = await eventService.getEventsByUser(userId, options);
+    return sendResponse(
+      res,
+      200,
+      true,
+      events,
+      null,
+      "Get events from current user successful"
     );
   } catch (error) {
     next(error);

@@ -107,6 +107,22 @@ eventService.getEventsByFilter = async (filter, options) => {
   return { events, count, totalPages };
 };
 
+eventService.getEventsByUser = async (userId, options) => {
+  const { page, limit } = options;
+
+  // Pagination
+  const count = await Event.countDocuments({ attendees: userId });
+  const totalPages = Math.ceil(count / limit);
+  const offset = limit * (page - 1);
+
+  const events = await Event.find({ attendees: userId })
+    .sort("timeDescending")
+    .skip(offset)
+    .limit(limit);
+
+  return { events, count, totalPages };
+};
+
 eventService.createEvent = async (userId, eventInfo) => {
   try {
     const { name, location, time, coverUrl, imagesUrls, description } =
